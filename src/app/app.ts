@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterModule, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
