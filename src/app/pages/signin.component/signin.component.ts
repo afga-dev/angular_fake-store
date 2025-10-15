@@ -1,0 +1,59 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-signin',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './signin.component.html',
+  styleUrl: './signin.component.css',
+})
+export class SigninComponent {
+  protected formBuilder = inject(FormBuilder);
+  protected router = inject(Router);
+  protected user = inject(UserService);
+
+  protected error = signal<string | null>(null);
+  protected isLoading = signal<boolean>(false);
+
+  protected showPassword = false;
+
+  readonly signInForm = this.formBuilder.nonNullable.group({
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]],
+  });
+
+  protected async submitSigninForm() {
+    try {
+      const login = this.signInForm.getRawValue();
+
+      if (this.signInForm.invalid || this.isLoading() || !login) return;
+
+      const response = await firstValueFrom(this.user.login(login));
+      const decodedPayload = this.decodeJWT(response.token);
+      const user = await firstValueFrom(this.user.getUser(decodedPayload.sub));
+      this.user.setUser(user);
+      this.router.navigate(['/']);
+    } catch (err) {
+      this.error.set(`Email and/or password doesn't match.`);
+      //console.log(err);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  protected decodeJWT(token: string) {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
+  }
+
+  protected hasError(controlName: string, error: string) {
+    const control = this.signInForm.get(controlName);
+    return !!(control?.touched && control?.hasError(error));
+  }
+}

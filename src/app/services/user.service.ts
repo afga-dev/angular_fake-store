@@ -3,6 +3,7 @@ import { API_URL } from './api.tokens';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
 import { User } from '../models/user.interface';
+import { Login, LoginResponse } from '../models/login.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,12 @@ export class UserService {
 
   getUser(id: number): Observable<User> {
     return this.httpClient.get<User>(`${this.baseUrl}/users/${id}`);
+  }
+
+  login(login: Login): Observable<LoginResponse> {
+    return this.httpClient.post<LoginResponse>(
+      `${this.baseUrl}/auth/login`,
+      login
+    );
   }
 }

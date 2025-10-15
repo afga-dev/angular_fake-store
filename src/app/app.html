@@ -1,56 +1,57 @@
 @if(user.isLoaded()) {
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/">
-      <i class="bi bi-shop me-2" aria-hidden="true"></i>
-      API Fake Store
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarContent"
-      aria-controls="navbarContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div
-      class="collapse navbar-collapse justify-content-between"
-      id="navbarContent"
-    >
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/">Shop</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        @if(user.isSignedOn()) {
-        <!-- Logged in -->
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/">
-            <i class="bi bi-cart"></i>
-            Cart
-          </a>
-        </li>
-        <li class="nav-item" routerLink="/">
-          <a class="nav-link">Sign out</a>
-        </li>
-        } @else {
-        <!-- Not logged in -->
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/">Sign in</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/">Sign up</a>
-        </li>
-        }
-      </ul>
+<div class="d-flex flex-column min-vh-100">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" routerLink="/">
+        <i class="bi bi-shop me-2" aria-hidden="true"></i>
+        API Fake Store
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+        aria-controls="navbarContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="collapse navbar-collapse justify-content-between"
+        id="navbarContent"
+      >
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/">Shop</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <!-- Is signed on -->
+          @if(user.isSignedOn()) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/">
+              <i class="bi bi-cart"></i> Cart
+            </a>
+          </li>
+          <li class="nav-item" routerLink="/">
+            <a class="nav-link">Sign out</a>
+          </li>
+          <!-- Not signed on -->
+          } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/">Sign up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/signin">Sign in</a>
+          </li>
+          }
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
-<div class="container-fluid">
-  <router-outlet></router-outlet>
+  </nav>
+  <main class="flex-grow-1 bg-light d-flex flex-column">
+    <router-outlet></router-outlet>
+  </main>
 </div>
 }

@@ -1,0 +1,94 @@
+<div
+  class="d-flex justify-content-center align-items-center flex-grow-1 w-100 pt-2 pt-md-4"
+>
+  <div class="card p-4 shadow-sm bg-white border border-secondary">
+    <form [formGroup]="signInForm" (ngSubmit)="submitSigninForm()">
+      <!-- Header -->
+      <div class="text-center mb-4">
+        <i class="bi bi-person fs-1" aria-hidden="true"></i>
+        <h3 id="signup-heading" class="mt-2">Welcome back</h3>
+        <p class="small">Sign in to start shopping</p>
+      </div>
+      <!-- Alerts -->
+      @if(error()) {
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error() }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="error.set(null)"
+          aria-label="Close"
+        ></button>
+      </div>
+      }
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <div class="input-group">
+          <span class="input-group-text border-secondary">
+            <i class="bi bi-person-fill"></i>
+          </span>
+          <input
+            type="text"
+            id="username"
+            class="form-control border-secondary"
+            placeholder="Enter your username"
+            formControlName="username"
+          />
+        </div>
+        @if(hasError('username', 'required')) {
+        <span class="text-danger" aria-live="polite">
+          Username is required.
+        </span>
+        }
+      </div>
+      <!-- Password -->
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+          <span class="input-group-text border-secondary">
+            <i class="bi bi-lock-fill"></i>
+          </span>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            class="form-control border-secondary"
+            placeholder="Enter your password"
+            formControlName="password"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword = !showPassword"
+          >
+            <i
+              class="bi"
+              [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"
+            ></i>
+          </button>
+        </div>
+        @if(hasError('password', 'required')) {
+        <span class="text-danger" aria-live="polite">
+          Password is required.
+        </span>
+        }
+      </div>
+      <!-- Footer -->
+      <div class="d-grid">
+        <button
+          type="submit"
+          class="btn btn-dark"
+          [disabled]="signInForm.invalid"
+        >
+          Sign in
+        </button>
+        <div class="text-center mt-2">
+          <p class="small text-dark">
+            Don't have an account?
+            <a routerLink="/signup" class="text-primary">Sign up</a>
+          </p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
