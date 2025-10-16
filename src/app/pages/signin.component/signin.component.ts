@@ -30,11 +30,11 @@ export class SigninComponent {
 
   protected async submitSigninForm() {
     try {
-      const login = this.signInForm.getRawValue();
+      const signin = this.signInForm.getRawValue();
 
-      if (this.signInForm.invalid || this.isLoading() || !login) return;
+      if (this.signInForm.invalid || this.isLoading() || !signin) return;
 
-      const response = await firstValueFrom(this.user.login(login));
+      const response = await firstValueFrom(this.user.signin(signin));
       const decodedPayload = this.decodeJWT(response.token);
       const user = await firstValueFrom(this.user.getUser(decodedPayload.sub));
       this.user.setUser(user);
