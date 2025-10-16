@@ -3,18 +3,19 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { UserService } from '../../services/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css',
 })
 export class SigninComponent {
   protected formBuilder = inject(FormBuilder);
   protected router = inject(Router);
+  protected activatedRoute = inject(ActivatedRoute);
   protected user = inject(UserService);
 
   protected error = signal<string | null>(null);
@@ -37,7 +38,10 @@ export class SigninComponent {
       const decodedPayload = this.decodeJWT(response.token);
       const user = await firstValueFrom(this.user.getUser(decodedPayload.sub));
       this.user.setUser(user);
-      this.router.navigate(['/']);
+
+      const returnUrl =
+        this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
+      this.router.navigate([returnUrl]);
     } catch (err) {
       this.error.set(`Email and/or password doesn't match.`);
       //console.log(err);
