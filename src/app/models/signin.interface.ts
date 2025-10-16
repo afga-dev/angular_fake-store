@@ -1,7 +1,7 @@
-export interface Login {
+export interface Signin {
     username: string;
     password: string;
     }
-export interface LoginResponse {
+export interface SigninResponse {
     token: string;
 }
