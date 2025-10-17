@@ -28,7 +28,7 @@ export class SigninComponent {
     password: ['', [Validators.required]],
   });
 
-  protected async submitSigninForm() {
+  protected async submitSignInForm() {
     try {
       const signin = this.signInForm.getRawValue();
 
@@ -38,6 +38,7 @@ export class SigninComponent {
       const decodedPayload = this.decodeJWT(response.token);
       const user = await firstValueFrom(this.user.getUser(decodedPayload.sub));
       this.user.setUser(user);
+      this.signInForm.reset();
 
       const returnUrl =
         this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';

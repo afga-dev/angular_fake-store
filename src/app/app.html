@@ -23,27 +23,32 @@
       >
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/">Shop</a>
+            <a
+              class="nav-link"
+              routerLink="/"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              >Shop</a
+            >
           </li>
         </ul>
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <!-- Is signed on -->
           @if(user.isSignedOn()) {
           <li class="nav-item">
-            <a class="nav-link" routerLink="/">
+            <a class="nav-link" routerLink="/" routerLinkActive="active">
               <i class="bi bi-cart"></i> Cart
             </a>
           </li>
-          <li class="nav-item" routerLink="/">
+          <li class="nav-item" (click)="onSignOut()">
             <a class="nav-link">Sign out</a>
           </li>
           <!-- Not signed on -->
           } @else {
           <li class="nav-item">
-            <a class="nav-link" routerLink="/">Sign up</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/signin">Sign in</a>
+            <a class="nav-link" routerLink="/signin" routerLinkActive="active"
+              >Sign in</a
+            >
           </li>
           }
         </ul>

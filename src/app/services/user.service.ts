@@ -41,4 +41,9 @@ export class UserService {
       user
     );
   }
+
+  onSignOut() {
+    localStorage.removeItem('id');
+    this.user.set(null);
+  }
 }
