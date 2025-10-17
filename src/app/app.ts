@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
 
 @Component({
@@ -11,8 +11,14 @@ import { UserService } from './services/user.service';
 })
 export class App implements OnInit {
   protected user = inject(UserService);
+  protected router = inject(Router);
 
   ngOnInit(): void {
     this.user.getUserFromLocalStorage();
+  }
+
+  onSignOut() {
+    this.user.onSignOut();
+    this.router.navigateByUrl('/signin');
   }
 }
