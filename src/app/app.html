@@ -1,6 +1,6 @@
-@if(user.isLoaded()) {
+@if(userService.isLoaded()) {
 <div class="d-flex flex-column min-vh-100">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" routerLink="/">
         <i class="bi bi-shop me-2" aria-hidden="true"></i>
@@ -34,7 +34,7 @@
         </ul>
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <!-- Is signed on -->
-          @if(user.isSignedOn()) {
+          @if(userService.isSignedOn()) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/" routerLinkActive="active">
               <i class="bi bi-cart"></i> Cart
@@ -55,7 +55,10 @@
       </div>
     </div>
   </nav>
-  <main class="flex-grow-1 bg-light d-flex flex-column">
+  <main
+    class="flex-grow-1 bg-light d-flex flex-column"
+    style="padding-top: 56px"
+  >
     <router-outlet></router-outlet>
   </main>
 </div>

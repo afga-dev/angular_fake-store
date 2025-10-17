@@ -10,15 +10,15 @@ import { UserService } from './services/user.service';
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  protected user = inject(UserService);
   protected router = inject(Router);
+  protected userService = inject(UserService);
 
   ngOnInit(): void {
-    this.user.getUserFromLocalStorage();
+    this.userService.getUserFromLocalStorage();
   }
 
   onSignOut() {
-    this.user.onSignOut();
+    this.userService.onSignOut();
     this.router.navigateByUrl('/signin');
   }
 }

@@ -16,7 +16,7 @@ export class SigninComponent {
   protected formBuilder = inject(FormBuilder);
   protected router = inject(Router);
   protected activatedRoute = inject(ActivatedRoute);
-  protected user = inject(UserService);
+  protected userService = inject(UserService);
 
   protected error = signal<string | null>(null);
   protected isLoading = signal<boolean>(false);
@@ -34,10 +34,10 @@ export class SigninComponent {
 
       if (this.signInForm.invalid || this.isLoading() || !signin) return;
 
-      const response = await firstValueFrom(this.user.signin(signin));
+      const response = await firstValueFrom(this.userService.signin(signin));
       const decodedPayload = this.decodeJWT(response.token);
-      const user = await firstValueFrom(this.user.getUser(decodedPayload.sub));
-      this.user.setUser(user);
+      const user = await firstValueFrom(this.userService.getUser(decodedPayload.sub));
+      this.userService.setUser(user);
       this.signInForm.reset();
 
       const returnUrl =
