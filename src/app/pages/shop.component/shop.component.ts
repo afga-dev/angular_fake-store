@@ -3,11 +3,12 @@ import { Product } from '../../models/product.interface';
 import { ProductService } from '../../services/product.service';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LazyLoadingDirective],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
 })
