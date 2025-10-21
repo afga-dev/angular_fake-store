@@ -24,19 +24,23 @@ export class SigninComponent {
   protected showPassword = false;
 
   readonly signInForm = this.formBuilder.nonNullable.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]],
+    username: ['', [Validators.required, Validators.maxLength(50)]],
+    password: ['', [Validators.required, Validators.maxLength(128)]],
   });
 
   protected async submitSignInForm() {
     try {
       const signin = this.signInForm.getRawValue();
+      signin.username = signin.username.trim();
+      signin.password = signin.password.trim();
 
       if (this.signInForm.invalid || this.isLoading() || !signin) return;
 
       const response = await firstValueFrom(this.userService.signin(signin));
       const decodedPayload = this.decodeJWT(response.token);
-      const user = await firstValueFrom(this.userService.getUser(decodedPayload.sub));
+      const user = await firstValueFrom(
+        this.userService.getUser(decodedPayload.sub)
+      );
       this.userService.setUser(user);
       this.signInForm.reset();
 

@@ -18,6 +18,10 @@ body {
   transform: scale(1.04);
   filter: grayscale(0%);
 }
+.product-card:hover .fab-button {
+  opacity: 1;
+  pointer-events: auto;
+}
 /* Product image */
 .product-img {
   width: 100%;
@@ -86,6 +90,7 @@ body {
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
   z-index: 2;
+  cursor: pointer;
 }
 /* Product information */
 .card-body {
