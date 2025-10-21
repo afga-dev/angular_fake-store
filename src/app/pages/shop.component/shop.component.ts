@@ -4,6 +4,8 @@ import { ProductService } from '../../services/product.service';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
+import { ActivatedRoute } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-shop',
@@ -13,11 +15,20 @@ import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
   styleUrl: './shop.component.css',
 })
 export class ShopComponent implements OnInit {
+  protected activatedRoute = inject(ActivatedRoute);
   protected productService = inject(ProductService);
 
-  products = signal<Product[] | null>(null);
+  products = signal<Product[]>([]);
+  private queryParamMap = toSignal(this.activatedRoute.queryParamMap);
 
   isLoaded = computed(() => !!this.products);
+  searchQuery = computed(() => this.queryParamMap()?.get('q') ?? '');
+  filteredProducts = computed(() => {
+    const query = this.searchQuery();
+    return query
+      ? this.products().filter((p) => p.title.toLowerCase().includes(query))
+      : this.products();
+  });
 
   ngOnInit(): void {
     this.loading();
