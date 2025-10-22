@@ -1,4 +1,8 @@
-<div class="search-overlay" [class.active]="isOpen" (click)="onClose()">
+<div
+  class="search-overlay"
+  [class.active]="isSearchOpen()"
+  (click)="closeSearch.emit()"
+>
   <div class="search-panel" (click)="$event.stopPropagation()">
     <div class="container-fluid d-flex align-items-center">
       <i class="bi bi-search search-icon"></i>
