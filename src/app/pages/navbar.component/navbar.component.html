@@ -36,17 +36,17 @@
         <li class="nav-item me-2">
           <button
             class="btn btn-sm btn-outline-light"
-            (click)="onToggleSearch()"
+            (click)="searchToggled.emit()"
           >
             <i
               class="bi"
-              [ngClass]="isSearchOpen ? 'bi-x-lg' : 'bi-search'"
+              [ngClass]="isSearchOpen() ? 'bi-x-lg' : 'bi-search'"
             ></i>
           </button>
         </li>
         <!-- Cart -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active">
+          <a class="nav-link">
             <i class="bi bi-cart"></i>
           </a>
         </li>

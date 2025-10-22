@@ -1,12 +1,12 @@
 @if (userService.isLoaded()) {
 <div class="d-flex flex-column min-vh-100">
   <!-- Narvbar -->
-  <app-navbar [isSearchOpen]="showSearch" (toggleSearch)="toggleSearch()" />
+  <app-navbar [isSearchOpen]="showSearch" (searchToggled)="toggleSearch()" />
   <!-- Search -->
   <main class="flex-grow-1 bg-light">
     <app-search
-      [isOpen]="showSearch"
-      (close)="closeSearch()"
+      [isSearchOpen]="showSearch"
+      (closeSearch)="closeSearch()"
       (search)="handleSearch($event)"
     />
     <router-outlet (activate)="closeSearch()" />
