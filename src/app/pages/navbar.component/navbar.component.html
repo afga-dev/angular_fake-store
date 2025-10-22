@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <i class="bi bi-shop me-2" aria-hidden="true"></i>
+      API FAKE STORE
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse justify-content-between"
+      id="navbarContent"
+    >
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            SHOP
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto align-items-center">
+        <!-- Search -->
+        <li class="nav-item me-2">
+          <button
+            class="btn btn-sm btn-outline-light"
+            (click)="onToggleSearch()"
+          >
+            <i
+              class="bi"
+              [ngClass]="isSearchOpen ? 'bi-x-lg' : 'bi-search'"
+            ></i>
+          </button>
+        </li>
+        <!-- Cart -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active">
+            <i class="bi bi-cart"></i>
+          </a>
+        </li>
+        <!-- Sign in/out -->
+        @if (userService.isSignedOn()) {
+        <li class="nav-item">
+          <a class="nav-link" (click)="onSignOut()">
+            <i class="bi bi-person-fill-slash"></i>
+          </a>
+        </li>
+        } @else {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/signin" routerLinkActive="active">
+            <i class="bi bi-person-fill"></i>
+          </a>
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>
