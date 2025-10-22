@@ -1,0 +1,13 @@
+/* Navbar links */
+.nav-link {
+  margin-right: 0.5rem;
+}
+/* Light button override */
+.navbar .btn-outline-light {
+  border: none;
+  color: #fff;
+}
+.navbar .btn-outline-light:hover {
+  background-color: transparent;
+  color: #fff;
+}

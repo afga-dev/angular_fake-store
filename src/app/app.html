@@ -1,98 +1,14 @@
 @if (userService.isLoaded()) {
 <div class="d-flex flex-column min-vh-100">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand d-flex align-items-center" routerLink="/">
-        <i class="bi bi-shop me-2" aria-hidden="true"></i>
-        API FAKE STORE
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarContent"
-        aria-controls="navbarContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="collapse navbar-collapse justify-content-between"
-        id="navbarContent"
-      >
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              routerLink="/"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-            >
-              SHOP
-            </a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto align-items-center">
-          <!-- Search -->
-          <li class="nav-item me-2">
-            <button
-              class="btn btn-sm btn-outline-light"
-              (click)="toggleSearch()"
-            >
-              <i
-                class="bi"
-                [ngClass]="showSearch ? 'bi-x-lg' : 'bi-search'"
-              ></i>
-            </button>
-          </li>
-          <!-- Cart -->
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/" routerLinkActive="active">
-              <i class="bi bi-cart"></i>
-            </a>
-          </li>
-          <!-- Sign in/out -->
-          @if (userService.isSignedOn()) {
-          <li class="nav-item">
-            <a class="nav-link" (click)="onSignOut()">
-              <i class="bi bi-person-fill-slash"></i>
-            </a>
-          </li>
-          } @else {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/signin" routerLinkActive="active">
-              <i class="bi bi-person-fill"></i>
-            </a>
-          </li>
-          }
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- Search overlay -->
-  <div
-    class="search-overlay"
-    [class.active]="showSearch"
-    (click)="closeSearch()"
-  >
-    <div class="search-panel" (click)="$event.stopPropagation()">
-      <div class="container-fluid d-flex align-items-center">
-        <i class="bi bi-search search-icon"></i>
-        <input
-          #searchInput
-          type="text"
-          class="search-input"
-          placeholder="Search for..."
-          [(ngModel)]="searchTerm"
-          maxlength="100"
-          name="search"
-          (keydown.enter)="onSearch()"
-        />
-      </div>
-    </div>
-  </div>
+  <!-- Narvbar -->
+  <app-navbar [isSearchOpen]="showSearch" (toggleSearch)="toggleSearch()" />
+  <!-- Search -->
   <main class="flex-grow-1 bg-light">
+    <app-search
+      [isOpen]="showSearch"
+      (close)="closeSearch()"
+      (search)="handleSearch($event)"
+    />
     <router-outlet (activate)="closeSearch()" />
   </main>
 </div>
