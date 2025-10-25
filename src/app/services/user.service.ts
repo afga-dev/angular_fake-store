@@ -9,15 +9,27 @@ import { Signin, SigninResponse } from '../models/signin.interface';
   providedIn: 'root',
 })
 export class UserService {
-  protected baseUrl = inject(API_URL);
-  protected httpClient = inject(HttpClient);
+  private baseUrl = inject(API_URL);
+  private httpClient = inject(HttpClient);
 
-  user = signal<User | null>(null);
-  isLoaded = signal(false);
+  private user = signal<User | null>(null);
+  private isLoaded = signal(false);
+  readonly getIsLoaded = this.isLoaded.asReadonly();
 
-  isSignedOn = computed(() => !!this.user());
+  readonly isSignedOn = computed(() => !!this.user());
 
-  setUser(user: User) {
+  getUser(id: number): Observable<User> {
+    return this.httpClient.get<User>(`${this.baseUrl}/users/${id}`);
+  }
+
+  signin(user: Signin): Observable<SigninResponse> {
+    return this.httpClient.post<SigninResponse>(
+      `${this.baseUrl}/auth/login`,
+      user
+    );
+  }
+
+  setUser(user: User): void {
     localStorage.setItem('id', user.id.toString());
     this.user.set(user);
   }
@@ -31,18 +43,7 @@ export class UserService {
     this.isLoaded.set(true);
   }
 
-  getUser(id: number): Observable<User> {
-    return this.httpClient.get<User>(`${this.baseUrl}/users/${id}`);
-  }
-
-  signin(user: Signin): Observable<SigninResponse> {
-    return this.httpClient.post<SigninResponse>(
-      `${this.baseUrl}/auth/login`,
-      user
-    );
-  }
-
-  onSignOut() {
+  onSignOut(): void {
     localStorage.removeItem('id');
     this.user.set(null);
   }

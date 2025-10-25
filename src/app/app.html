@@ -1,7 +1,13 @@
-@if (userService.isLoaded()) {
+@if (getLoaded()) {
 <div class="d-flex flex-column min-vh-100">
   <!-- Narvbar -->
-  <app-navbar [isSearchOpen]="showSearch" (searchToggled)="toggleSearch()" />
+  <app-navbar
+    [isSearchOpen]="showSearch"
+    (searchToggled)="searchToggled()"
+    [isCartOpen]="showCart"
+    (cartToggled)="cartToggled()"
+  />
+  <app-cart-drawer (closeCart)="closeCart()" />
   <!-- Search -->
   <main class="flex-grow-1 bg-light">
     <app-search
@@ -9,7 +15,7 @@
       (closeSearch)="closeSearch()"
       (search)="handleSearch($event)"
     />
-    <router-outlet (activate)="closeSearch()" />
+    <router-outlet (activate)="closeChildren()" />
   </main>
 </div>
 }

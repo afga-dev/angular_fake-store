@@ -6,23 +6,30 @@ import { CommonModule } from '@angular/common';
 import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CartService } from '../../services/cart.service';
+import { Cart } from '../../models/cart.interface';
+import { SkeletonComponent } from '../../shared/skeleton.component/skeleton.component';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, LazyLoadingDirective],
+  imports: [CommonModule, LazyLoadingDirective, SkeletonComponent],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
 })
 export class ShopComponent implements OnInit {
-  protected activatedRoute = inject(ActivatedRoute);
-  protected productService = inject(ProductService);
+  private activatedRoute = inject(ActivatedRoute);
+  private productService = inject(ProductService);
+  private cartService = inject(CartService);
 
-  products = signal<Product[]>([]);
+  private products = signal<Product[]>([]);
+
+  readonly loading = signal(true);
+  readonly getProducts = this.products.asReadonly();
+
   private queryParamMap = toSignal(this.activatedRoute.queryParamMap);
+  private searchQuery = computed(() => this.queryParamMap()?.get('q') ?? '');
 
-  isLoaded = computed(() => !!this.products);
-  searchQuery = computed(() => this.queryParamMap()?.get('q') ?? '');
   filteredProducts = computed(() => {
     const query = this.searchQuery();
     return query
@@ -30,16 +37,30 @@ export class ShopComponent implements OnInit {
       : this.products();
   });
 
-  ngOnInit(): void {
-    this.loading();
-  }
-
-  protected async loading() {
+  async ngOnInit() {
     try {
       const products = await firstValueFrom(this.productService.getProducts());
       this.products.set(products);
     } catch (err) {
       // console.log(err);
+    } finally {
+      setTimeout(() => this.loading.set(false), 200);
     }
+  }
+
+  transformProduct(product: Product): Cart {
+    return {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+    };
+  }
+
+  addCart(product: Product): void {
+    const newProduct = this.transformProduct(product);
+    this.cartService.addProduct(newProduct);
+    this.cartService.setIsOpen(true);
   }
 }

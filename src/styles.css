@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: "Inter";
+  src: url("/assets/fonts/Inter.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --main-color: #000;
+  --main-font: "Inter", sans-serif;
+}
+body {
+  color: --main-color;
+  font-family: var(--main-font);
+}

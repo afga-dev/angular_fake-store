@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "api-fake-store": {
+    "angular-fake-store": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -64,10 +64,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "api-fake-store:build:production"
+              "buildTarget": "angular-fake-store:build:production"
             },
             "development": {
-              "buildTarget": "api-fake-store:build:development"
+              "buildTarget": "angular-fake-store:build:development"
             }
           },
           "defaultConfiguration": "development"

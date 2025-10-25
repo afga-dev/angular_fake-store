@@ -1,4 +1,4 @@
-body {
+:host {
   background: transparent;
   margin: 0;
 }
@@ -13,7 +13,7 @@ body {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 0.25rem;
 }
-/* Hover effect: color on loaded images */
+/* Zoom and full color */
 .product-card:hover .product-img.loaded {
   transform: scale(1.04);
   filter: grayscale(0%);
@@ -29,43 +29,19 @@ body {
   object-fit: cover;
   border-radius: 0.25rem;
   transition: transform 0.3s ease, filter 0.3s ease, opacity 0.5s ease;
-  opacity: 0; /* hidden until loaded */
+  opacity: 0;
   position: relative;
   display: block;
 }
-/* Loading placeholder (shimmer and pulse) */
+/* Image states for lazy loading */
 .product-img.loading {
-  background: linear-gradient(180deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
-  background-size: 100% 200%;
-  animation: shimmer-vertical 1.2s linear infinite,
-    pulse 1.5s ease-in-out infinite;
   opacity: 0.6;
   transform: scale(1.02);
 }
-/* Fully loaded image with grayscale by default */
 .product-img.loaded {
   opacity: 1;
-  filter: grayscale(100%);
+  filter: grayscale(30%);
   transform: scale(1);
-}
-/* Shimmer animation */
-@keyframes shimmer-vertical {
-  0% {
-    background-position: 0 -200%;
-  }
-  100% {
-    background-position: 0 200%;
-  }
-}
-/* Pulse animation */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 0.8;
-  }
 }
 /* Image wrapper */
 .product-img-wrapper {
@@ -80,7 +56,7 @@ body {
   width: 36px;
   height: 36px;
   font-size: 1.1rem;
-  background: white;
+  background: #f8f9fb;
   border: none;
   border-radius: 50%;
   display: flex;
@@ -98,33 +74,30 @@ body {
 }
 .product-title {
   font-size: 0.95rem;
-  font-weight: 600;
   margin-bottom: 0.3rem;
-  color: #20293b;
+  font-weight: 400;
 }
 .product-price {
   font-size: 0.85rem;
-  font-weight: 500;
-  color: #111827;
   padding: 3px 8px;
   border-radius: 0;
   display: inline-block;
+  color: #606060;
 }
-/* Custom 5 items per row for desktop */
-.col-5 {
-  flex: 0 0 20%;
-  max-width: 20%;
+/* Responsive columns */
+.col-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
 }
-/* Responsive fallback for smaller screens */
-@media (max-width: 768px) {
-  .col-5 {
-    flex: 0 0 50%;
-    max-width: 50%;
+@media (min-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
   }
 }
-@media (max-width: 576px) {
-  .col-5 {
-    flex: 0 0 100%;
-    max-width: 100%;
+@media (min-width: 992px) {
+  .col-lg-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
   }
 }

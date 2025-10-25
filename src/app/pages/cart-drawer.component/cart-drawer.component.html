@@ -1,0 +1,59 @@
+<div
+  class="cart-overlay"
+  [class.active]="isCartOpen()"
+  (click)="closeCart.emit()"
+>
+  <div class="cart-drawer" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="cart-header">
+      <h4 class="cart-title">CART</h4>
+      <div class="divider"></div>
+    </div>
+    <!-- Cart -->
+    <div class="cart-items flex-grow-1 overflow-auto my-3">
+      <ul class="list-unstyled m-0">
+        @for (product of getCart(); track product.id) {
+        <li class="cart-item d-flex align-items-center mb-3">
+          <img
+            [src]="product.image"
+            alt="{{ product.title }}"
+            class="cart-item-img me-3"
+          />
+          <div class="flex-grow-1">
+            <h6 class="mb-1 cart-title">{{ product.title | uppercase }}</h6>
+            <p class="mb-2 small cart-price">{{ product.price | currency }}</p>
+
+            <div class="d-flex align-items-center">
+              <div class="quantity-group d-flex align-items-center me-3">
+                <button
+                  class="btn-quantity"
+                  (click)="decreaseQuantity(product.id)"
+                >
+                  -
+                </button>
+                <span class="quantity-value">{{ product.quantity }}</span>
+                <button
+                  class="btn-quantity"
+                  (click)="increaseQuantity(product.id)"
+                >
+                  +
+                </button>
+              </div>
+              <button class="btn-remove" (click)="removeProduct(product.id)">
+                REMOVE
+              </button>
+            </div>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+    <!-- Footer -->
+    <div class="cart-footer text-center mt-auto">
+      <div class="divider"></div>
+      <button class="btn btn-dark w-100 py-2 mt-3">
+        CHECKOUT - {{ getTotal() | currency }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -13,22 +13,22 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './signin.component.css',
 })
 export class SigninComponent {
-  protected formBuilder = inject(FormBuilder);
-  protected router = inject(Router);
-  protected activatedRoute = inject(ActivatedRoute);
-  protected userService = inject(UserService);
+  private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private userService = inject(UserService);
 
-  protected error = signal<string | null>(null);
-  protected isLoading = signal<boolean>(false);
+  readonly error = signal<string | null>(null);
+  readonly isLoading = signal<boolean>(false);
 
-  protected showPassword = false;
+  showPassword = false;
 
   readonly signInForm = this.formBuilder.nonNullable.group({
     username: ['', [Validators.required, Validators.maxLength(50)]],
     password: ['', [Validators.required, Validators.maxLength(128)]],
   });
 
-  protected async submitSignInForm() {
+  async submitSignInForm() {
     try {
       const signin = this.signInForm.getRawValue();
       signin.username = signin.username.trim();
@@ -48,20 +48,20 @@ export class SigninComponent {
         this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
       this.router.navigate([returnUrl]);
     } catch (err) {
-      this.error.set(`Email and/or password doesn't match.`);
+      this.error.set('Incorrect email or password.');
       //console.log(err);
     } finally {
       this.isLoading.set(false);
     }
   }
 
-  protected decodeJWT(token: string) {
+  private decodeJWT(token: string) {
     const payload = token.split('.')[1];
     const decodedPayload = atob(payload);
     return JSON.parse(decodedPayload);
   }
 
-  protected hasError(controlName: string, error: string) {
+  hasError(controlName: string, error: string): boolean {
     const control = this.signInForm.get(controlName);
     return !!(control?.touched && control?.hasError(error));
   }

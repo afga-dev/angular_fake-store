@@ -1,7 +1,7 @@
 export interface Signin {
-    username: string;
-    password: string;
-    }
+  username: string;
+  password: string;
+}
 export interface SigninResponse {
-    token: string;
+  token: string;
 }

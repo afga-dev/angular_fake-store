@@ -34,7 +34,7 @@ export class LazyLoadingDirective implements OnInit {
     }
   }
 
-  private loadImage(image: HTMLImageElement) {
+  private loadImage(image: HTMLImageElement): void {
     this.renderer.addClass(image, 'loading');
 
     const temporal = new Image();
