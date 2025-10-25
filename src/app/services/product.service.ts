@@ -5,13 +5,13 @@ import { API_URL } from './api.tokens';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-  protected baseUrl = inject(API_URL);
-  protected httpClient = inject(HttpClient)
-  
-  getProducts(): Observable<Product[]>{
+  private baseUrl = inject(API_URL);
+  private httpClient = inject(HttpClient);
+
+  getProducts(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(`${this.baseUrl}/products`);
   }
 }

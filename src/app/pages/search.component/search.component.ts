@@ -21,16 +21,16 @@ export class SearchComponent {
     if (this.isSearchOpen()) this.focusInput();
   }
 
-  focusInput() {
+  private focusInput(): void {
     setTimeout(() => this.searchInput?.nativeElement.focus(), 300);
   }
 
-  onSearch() {
+  onSearch(): void {
     const query = this.searchTerm.toLowerCase().trim();
     if (!query) return;
 
-    this.search.emit(query);
     this.searchTerm = '';
     this.closeSearch.emit();
+    this.search.emit(query);
   }
 }

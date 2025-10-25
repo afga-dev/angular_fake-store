@@ -1,0 +1,17 @@
+<div class="skeleton-container row g-4 flex-grow-1">
+  @for (i of placeholders(); track i) {
+  <div class="col-6 col-md-4 col-lg-3">
+    <div class="card product-card skeleton-card">
+      <div class="product-img-wrapper">
+        <div class="skeleton skeleton-img"></div>
+      </div>
+      <div
+        class="card-body d-flex flex-column justify-content-center align-items-center"
+      >
+        <div class="skeleton skeleton-text long"></div>
+        <div class="skeleton skeleton-text short"></div>
+      </div>
+    </div>
+  </div>
+  }
+</div>

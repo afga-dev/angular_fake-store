@@ -11,14 +11,20 @@ import { UserService } from '../../services/user.service';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  protected readonly userService = inject(UserService);
+  private readonly userService = inject(UserService);
   private readonly router = inject(Router);
 
   isSearchOpen = input(false);
+  isCartOpen = input(false);
   searchToggled = output<void>();
+  cartToggled = output<void>();
 
   onSignOut(): void {
     this.userService.onSignOut();
     this.router.navigateByUrl('/signin');
+  }
+
+  getIsSignedOn(): boolean {
+    return this.userService.isSignedOn();
   }
 }
