@@ -1,11 +1,11 @@
-import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[appLazyLoading]',
   standalone: true,
 })
 export class LazyLoadingDirective implements OnInit {
-  @Input() appLazyLoading!: string;
+  appLazyLoading = input<string>('src');
 
   private intersectionObserver?: IntersectionObserver;
 
@@ -35,12 +35,10 @@ export class LazyLoadingDirective implements OnInit {
   }
 
   private loadImage(image: HTMLImageElement): void {
-    this.renderer.addClass(image, 'loading');
-
     const temporal = new Image();
-    temporal.src = this.appLazyLoading;
+    temporal.src = this.appLazyLoading();
     temporal.onload = () => {
-      this.renderer.setAttribute(image, 'src', this.appLazyLoading);
+      this.renderer.setAttribute(image, 'src', this.appLazyLoading());
       this.renderer.removeClass(image, 'loading');
       this.renderer.addClass(image, 'loaded');
     };

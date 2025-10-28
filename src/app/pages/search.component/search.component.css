@@ -19,7 +19,7 @@
 /* Search panel */
 .search-panel {
   background-color: #212529;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 0;
   display: flex;
   align-items: center;
   transform: translateY(-100%);

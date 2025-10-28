@@ -7,7 +7,6 @@ import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CartService } from '../../services/cart.service';
-import { Cart } from '../../models/cart.interface';
 import { SkeletonComponent } from '../../shared/skeleton.component/skeleton.component';
 
 @Component({
@@ -25,12 +24,11 @@ export class ShopComponent implements OnInit {
   private products = signal<Product[]>([]);
 
   readonly loading = signal(true);
-  readonly getProducts = this.products.asReadonly();
 
   private queryParamMap = toSignal(this.activatedRoute.queryParamMap);
   private searchQuery = computed(() => this.queryParamMap()?.get('q') ?? '');
 
-  filteredProducts = computed(() => {
+  readonly filteredProducts = computed(() => {
     const query = this.searchQuery();
     return query
       ? this.products().filter((p) => p.title.toLowerCase().includes(query))
@@ -48,18 +46,8 @@ export class ShopComponent implements OnInit {
     }
   }
 
-  transformProduct(product: Product): Cart {
-    return {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      quantity: 1,
-      image: product.image,
-    };
-  }
-
   addCart(product: Product): void {
-    const newProduct = this.transformProduct(product);
+    const newProduct = this.cartService.createCart(product);
     this.cartService.addProduct(newProduct);
     this.cartService.setIsOpen(true);
   }

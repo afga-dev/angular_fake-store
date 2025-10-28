@@ -4,6 +4,19 @@
   (click)="closeCart.emit()"
 >
   <div class="cart-drawer" (click)="$event.stopPropagation()">
+    @if(getCart().length < 1 && !hasPurchasedSignal()){
+    <div class="empty-cart">Your cart is empty</div>
+    }@else if(getCart().length < 1 && hasPurchasedSignal()) {
+    <div class="empty-cart thank-you">
+      <h2>Thank you for your purchase!</h2>
+      <p>
+        You can download your invoice
+        <button type="button" class="btn-remove" (click)="onGeneratePDF()">
+          here</button
+        >
+      </p>
+    </div>
+    } @else {
     <!-- Header -->
     <div class="cart-header">
       <h4 class="cart-title">CART</h4>
@@ -40,7 +53,7 @@
                 </button>
               </div>
               <button class="btn-remove" (click)="removeProduct(product.id)">
-                REMOVE
+                Remove
               </button>
             </div>
           </div>
@@ -51,9 +64,10 @@
     <!-- Footer -->
     <div class="cart-footer text-center mt-auto">
       <div class="divider"></div>
-      <button class="btn btn-dark w-100 py-2 mt-3">
-        CHECKOUT - {{ getTotal() | currency }}
+      <button class="btn btn-dark w-100 py-2 mt-3" (click)="onCheckout()">
+        Checkout - {{ getTotal() | currency }}
       </button>
     </div>
+    }
   </div>
 </div>

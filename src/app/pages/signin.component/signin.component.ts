@@ -37,7 +37,7 @@ export class SigninComponent {
       if (this.signInForm.invalid || this.isLoading() || !signin) return;
 
       const response = await firstValueFrom(this.userService.signin(signin));
-      const decodedPayload = this.decodeJWT(response.token);
+      const decodedPayload = this.userService.decodeJWT(response.token);
       const user = await firstValueFrom(
         this.userService.getUser(decodedPayload.sub)
       );
@@ -53,12 +53,6 @@ export class SigninComponent {
     } finally {
       this.isLoading.set(false);
     }
-  }
-
-  private decodeJWT(token: string) {
-    const payload = token.split('.')[1];
-    const decodedPayload = atob(payload);
-    return JSON.parse(decodedPayload);
   }
 
   hasError(controlName: string, error: string): boolean {
