@@ -47,4 +47,10 @@ export class UserService {
     localStorage.removeItem('id');
     this.user.set(null);
   }
+
+  decodeJWT(token: string) {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
+  }
 }

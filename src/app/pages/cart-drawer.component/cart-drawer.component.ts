@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, output } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { Cart } from '../../models/cart.interface';
 import { CartService } from '../../services/cart.service';
 
@@ -13,8 +20,16 @@ import { CartService } from '../../services/cart.service';
 export class CartDrawerComponent implements OnInit {
   private cartService = inject(CartService);
 
-  isCartOpen = this.cartService.getIsOpen;
+  private hasPurchased = signal<boolean>(false);
+
+  readonly isCartOpen = this.cartService.getIsOpen;
+  readonly hasPurchasedSignal = this.hasPurchased.asReadonly();
+
   closeCart = output<void>();
+
+  readonly resetPurchaseOnOpen = effect(() => {
+    if (this.cartService.getIsOpen()) this.hasPurchased.set(false);
+  });
 
   ngOnInit(): void {
     this.cartService.getCart();
@@ -29,14 +44,23 @@ export class CartDrawerComponent implements OnInit {
   }
 
   decreaseQuantity(id: number): void {
-    return this.cartService.decreaseQuantity(id);
+    this.cartService.decreaseQuantity(id);
   }
 
   increaseQuantity(id: number): void {
-    return this.cartService.incrementQuantity(id);
+    this.cartService.incrementQuantity(id);
   }
 
   removeProduct(id: number): void {
-    return this.cartService.removeProduct(id);
+    this.cartService.removeProduct(id);
+  }
+
+  onCheckout(): void {
+    this.cartService.onCheckout();
+    this.hasPurchased.set(true);
+  }
+
+  onGeneratePDF(): void {
+    this.cartService.generatePDF();
   }
 }

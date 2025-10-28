@@ -1,7 +1,9 @@
 <!-- Skeleton placeholders -->
 @if(loading()){
 <div class="container-fluid flex-grow-1 d-flex flex-column py-4">
-  <app-skeleton [count]="getProducts().length || 20"></app-skeleton>
+  <app-skeleton
+    [count]="filteredProducts().length > 0 ? filteredProducts().length : 0"
+  />
 </div>
 }
 <!-- Products -->

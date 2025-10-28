@@ -1,73 +1,57 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-  <div class="container-fluid">
-    <!-- Brand -->
-    <a class="navbar-brand d-flex align-items-center" routerLink="/">
-      <i class="bi bi-shop me-2" aria-hidden="true"></i>
-      FAKE STORE
-    </a>
-    <!-- Toggler -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarContent"
-      aria-controls="navbarContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <!-- Navbar -->
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <!-- Left menu -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            >SHOP</a
-          >
-        </li>
-      </ul>
-      <!-- Right menu -->
-      <ul
-        class="navbar-nav ms-auto d-lg-flex flex-column flex-lg-row align-items-end align-items-lg-center mb-2 mb-lg-0"
-      >
-        <!-- Search -->
-        <li class="nav-item me-lg-2 mb-2 mb-lg-0">
-          <button
-            class="btn btn-sm btn-outline-light"
-            (click)="searchToggled.emit()"
-          >
-            <i
-              class="bi"
-              [ngClass]="isSearchOpen() ? 'bi-x-lg' : 'bi-search'"
-            ></i>
-          </button>
-        </li>
-        <!-- Cart -->
-        <li class="nav-item me-lg-2 mb-2 mb-lg-0">
-          <a class="nav-link" (click)="cartToggled.emit()">
-            <i class="bi" [ngClass]="isCartOpen() ? 'bi-x-lg' : 'bi-cart'"></i>
-          </a>
-        </li>
-        <!-- Sign in -->
-        @if(getIsSignedOn()) {
-        <li class="nav-item mb-2 mb-lg-0">
-          <a class="nav-link" (click)="onSignOut()">
-            <i class="bi bi-person-fill-slash"></i>
-          </a>
-        </li>
+<nav class="navbar navbar-dark bg-dark fixed-top">
+  <div
+    class="container-fluid d-flex justify-content-between align-items-center"
+  >
+    <!-- Left menu -->
+    <ul class="navbar-nav d-flex flex-row align-items-center mb-0">
+      <li class="nav-item me-3">
+        <a
+          class="nav-link"
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          title="Home"
+        >
+          <i class="bi bi-shop"></i>
+        </a>
+      </li>
+    </ul>
+    <!-- Brand in center -->
+    <a class="navbar-brand mx-auto" routerLink="/">FAKE STORE</a>
+    <!-- Right icons -->
+    <ul class="navbar-nav d-flex flex-row align-items-center mb-0">
+      <!-- Search -->
+      <li class="nav-item me-3">
+        <a class="nav-link" (click)="searchToggled.emit()" title="Search">
+          <i
+            class="bi"
+            [ngClass]="isSearchOpen() ? 'bi-x-lg' : 'bi-search'"
+          ></i>
+        </a>
+      </li>
+      <!-- Cart -->
+      <li class="nav-item me-3">
+        <a class="nav-link" (click)="cartToggled.emit()" title="Cart">
+          <i class="bi" [ngClass]="isCartOpen() ? 'bi-x-lg' : 'bi-cart'"></i>
+        </a>
+      </li>
+      <!-- Sign in and out -->
+      <li class="nav-item">
+        @if(!getIsSignedOn()) {
+        <a
+          class="nav-link"
+          routerLink="/signin"
+          routerLinkActive="active"
+          title="Sign in"
+        >
+          <i class="bi bi-person-fill"></i>
+        </a>
         } @else {
-        <li class="nav-item mb-2 mb-lg-0">
-          <a class="nav-link" routerLink="/signin" routerLinkActive="active">
-            <i class="bi bi-person-fill"></i>
-          </a>
-        </li>
+        <a class="nav-link" (click)="onSignOut()" title="Sign out">
+          <i class="bi bi-person-fill-slash"></i>
+        </a>
         }
-      </ul>
-    </div>
+      </li>
+    </ul>
   </div>
 </nav>
