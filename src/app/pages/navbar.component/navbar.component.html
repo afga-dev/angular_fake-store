@@ -5,14 +5,13 @@
     <!-- Left menu -->
     <ul class="navbar-nav d-flex flex-row align-items-center mb-0">
       <li class="nav-item me-3">
-        <a
-          class="nav-link"
-          routerLink="/"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          title="Home"
-        >
+        <a class="nav-link" (click)="scrollToHome()" title="Home">
           <i class="bi bi-shop"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="scrollToFooter()" title="Contact">
+          <i class="bi bi-telephone-fill"></i>
         </a>
       </li>
     </ul>
@@ -22,7 +21,7 @@
     <ul class="navbar-nav d-flex flex-row align-items-center mb-0">
       <!-- Search -->
       <li class="nav-item me-3">
-        <a class="nav-link" (click)="searchToggled.emit()" title="Search">
+        <a class="nav-link" (click)="onSearchToggled.emit()" title="Search">
           <i
             class="bi"
             [ngClass]="isSearchOpen() ? 'bi-x-lg' : 'bi-search'"
@@ -31,13 +30,13 @@
       </li>
       <!-- Cart -->
       <li class="nav-item me-3">
-        <a class="nav-link" (click)="cartToggled.emit()" title="Cart">
+        <a class="nav-link" (click)="onCartToggled.emit()" title="Cart">
           <i class="bi" [ngClass]="isCartOpen() ? 'bi-x-lg' : 'bi-cart'"></i>
         </a>
       </li>
       <!-- Sign in and out -->
       <li class="nav-item">
-        @if(!getIsSignedOn()) {
+        @if(!isAuthenticated()) {
         <a
           class="nav-link"
           routerLink="/signin"

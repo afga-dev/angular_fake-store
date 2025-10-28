@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
 import { SearchComponent } from './pages/search.component/search.component';
 import { NavbarComponent } from './pages/navbar.component/navbar.component';
 import { CartDrawerComponent } from './pages/cart-drawer.component/cart-drawer.component';
 import { CartService } from './services/cart.service';
+import { FooterComponent } from './pages/footer.component/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -14,24 +15,33 @@ import { CartService } from './services/cart.service';
     SearchComponent,
     NavbarComponent,
     CartDrawerComponent,
+    FooterComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App implements OnInit {
-  private readonly router = inject(Router);
-  private readonly userService = inject(UserService);
-  private readonly cartService = inject(CartService);
+  private router = inject(Router);
+  private userService = inject(UserService);
+  private cartService = inject(CartService);
 
   showSearch = false;
   showCart = false;
 
   ngOnInit(): void {
-    this.userService.getUserFromLocalStorage();
+    this.userService.loadUserFromLocalStorage();
   }
 
+  readonly isOpen = effect(() => {
+    this.showCart = this.cartService.isOpen();
+  });
+
   getLoaded(): boolean {
-    return this.userService.getIsLoaded();
+    return this.userService.isLoaded();
+  }
+
+  getpageLoaded(): boolean {
+    return this.userService.isPageLoaded();
   }
 
   handleSearch(query: string): void {

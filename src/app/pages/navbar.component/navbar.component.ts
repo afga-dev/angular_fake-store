@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { scrollToElement, scrollToTop } from '../../utils/scroll-utils';
 
 @Component({
   selector: 'app-navbar',
@@ -11,20 +12,34 @@ import { UserService } from '../../services/user.service';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  private readonly userService = inject(UserService);
-  private readonly router = inject(Router);
+  private router = inject(Router);
+  private userService = inject(UserService);
 
   isSearchOpen = input(false);
   isCartOpen = input(false);
-  searchToggled = output<void>();
-  cartToggled = output<void>();
+  onSearchToggled = output<void>();
+  onCartToggled = output<void>();
+  onClick = output<void>();
 
   onSignOut(): void {
-    this.userService.onSignOut();
-    this.router.navigateByUrl('/signin');
+    this.userService.signOut();
   }
 
-  getIsSignedOn(): boolean {
-    return this.userService.isSignedOn();
+  isAuthenticated(): boolean {
+    return this.userService.isAuthenticated();
+  }
+
+  scrollToHome(): void {
+    if (this.router.url === '/') {
+      this.onClick.emit();
+      scrollToTop();
+    } else {
+      this.router.navigateByUrl('/');
+    }
+  }
+
+  scrollToFooter(): void {
+    this.onClick.emit();
+    scrollToElement('contact');
   }
 }

@@ -11,12 +11,13 @@ import { Product } from '../models/product.interface';
 export class CartService {
   private userService = inject(UserService);
 
-  private cart = signal<Cart[]>([]);
-  readonly getCartSignal = this.cart.asReadonly();
-  private isOpen = signal<boolean>(false);
-  readonly getIsOpen = this.isOpen.asReadonly();
+  private _cart = signal<Cart[]>([]);
+  readonly cart = this._cart.asReadonly();
 
-  getCart(): void {
+  private _isOpen = signal<boolean>(false);
+  readonly isOpen = this._isOpen.asReadonly();
+
+  loadCart(): void {
     const cart = localStorage.getItem('cart');
     const parsedCart = cart ? JSON.parse(cart) : [];
     if (cart) {
@@ -27,8 +28,12 @@ export class CartService {
         quantity: Number(item.quantity),
         image: String(item.image),
       }));
-      this.cart.set(cartItems);
+      this._cart.set(cartItems);
     }
+  }
+
+  setIsOpen(state: boolean): void {
+    this._isOpen.set(state);
   }
 
   createCart(product: Product): Cart {
@@ -41,21 +46,17 @@ export class CartService {
     };
   }
 
-  setIsOpen(state: boolean): void {
-    this.isOpen.set(state);
-  }
-
   saveCart(): void {
     localStorage.setItem('cart', JSON.stringify(this.cart()));
   }
 
-  totalCart(): number {
+  getTotal(): number {
     const total = this.cart().reduce(
       (sum, product) => sum + product.price * product.quantity,
       0
     );
 
-    if (this.userService.isSignedOn()) {
+    if (this.userService.isAuthenticated()) {
       return total * (1 - 15 / 100);
     } else {
       return total;
@@ -72,7 +73,7 @@ export class CartService {
     if (product.quantity < 1) {
       this.removeProduct(id);
     } else {
-      this.cart.set(cart);
+      this._cart.set(cart);
       this.saveCart();
     }
   }
@@ -84,7 +85,7 @@ export class CartService {
 
     product.quantity++;
 
-    this.cart.set(cart);
+    this._cart.set(cart);
     this.saveCart();
   }
 
@@ -98,20 +99,20 @@ export class CartService {
       cart.push({ ...product, quantity: product.quantity || 1 });
     }
 
-    this.cart.set(cart);
+    this._cart.set(cart);
     this.saveCart();
   }
 
   removeProduct(id: number): void {
-    this.cart.set(this.cart().filter((p) => p.id !== id));
+    this._cart.set(this.cart().filter((p) => p.id !== id));
     this.saveCart();
   }
 
-  onCheckout(): void {
+  checkout(): void {
     const tempCart = this.cart();
 
     sessionStorage.setItem('tempCart', JSON.stringify(tempCart));
-    this.cart.set([]);
+    this._cart.set([]);
     localStorage.clear();
   }
 

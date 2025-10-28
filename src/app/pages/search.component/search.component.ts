@@ -12,8 +12,8 @@ export class SearchComponent {
   searchTerm = '';
 
   isSearchOpen = input(false);
-  closeSearch = output<void>();
-  search = output<string>();
+  onCloseSearch = output<void>();
+  onSearchQuery = output<string>();
 
   @ViewChild('searchInput') private searchInput?: ElementRef<HTMLInputElement>;
 
@@ -30,7 +30,7 @@ export class SearchComponent {
     if (!query) return;
 
     this.searchTerm = '';
-    this.closeSearch.emit();
-    this.search.emit(query);
+    this.onCloseSearch.emit();
+    this.onSearchQuery.emit(query);
   }
 }
