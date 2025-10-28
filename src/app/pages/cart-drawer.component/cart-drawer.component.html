@@ -1,12 +1,12 @@
 <div
   class="cart-overlay"
   [class.active]="isCartOpen()"
-  (click)="closeCart.emit()"
+  (click)="onCloseCart.emit()"
 >
   <div class="cart-drawer" (click)="$event.stopPropagation()">
-    @if(getCart().length < 1 && !hasPurchasedSignal()){
+    @if(getCart().length < 1 && !hasPurchased()){
     <div class="empty-cart">Your cart is empty</div>
-    }@else if(getCart().length < 1 && hasPurchasedSignal()) {
+    }@else if(getCart().length < 1 && hasPurchased()) {
     <div class="empty-cart thank-you">
       <h2>Thank you for your purchase!</h2>
       <p>

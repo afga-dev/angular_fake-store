@@ -12,40 +12,48 @@ export class UserService {
   private baseUrl = inject(API_URL);
   private httpClient = inject(HttpClient);
 
-  private user = signal<User | null>(null);
-  private isLoaded = signal(false);
-  readonly getIsLoaded = this.isLoaded.asReadonly();
+  private _user = signal<User | null>(null);
 
-  readonly isSignedOn = computed(() => !!this.user());
+  private _isLoaded = signal(false);
+  readonly isLoaded = this._isLoaded.asReadonly();
 
-  getUser(id: number): Observable<User> {
+  private _isPageLoaded = signal(false);
+  readonly isPageLoaded = this._isPageLoaded.asReadonly();
+
+  readonly isAuthenticated = computed(() => !!this._user());
+
+  fetchUser(id: number): Observable<User> {
     return this.httpClient.get<User>(`${this.baseUrl}/users/${id}`);
   }
 
-  signin(user: Signin): Observable<SigninResponse> {
+  signIn(user: Signin): Observable<SigninResponse> {
     return this.httpClient.post<SigninResponse>(
       `${this.baseUrl}/auth/login`,
       user
     );
   }
 
-  setUser(user: User): void {
-    localStorage.setItem('id', user.id.toString());
-    this.user.set(user);
-  }
-
-  async getUserFromLocalStorage() {
+  async loadUserFromLocalStorage() {
     const storedId = localStorage.getItem('id');
     if (storedId) {
-      const user = await firstValueFrom(this.getUser(Number(storedId)));
-      this.user.set(user);
+      const user = await firstValueFrom(this.fetchUser(Number(storedId)));
+      this._user.set(user);
     }
-    this.isLoaded.set(true);
+    this._isLoaded.set(true);
   }
 
-  onSignOut(): void {
+  setUser(user: User): void {
+    localStorage.setItem('id', user.id.toString());
+    this._user.set(user);
+  }
+
+  setPageLoaded(state: boolean): void {
+    this._isPageLoaded.set(state);
+  }
+
+  signOut(): void {
     localStorage.removeItem('id');
-    this.user.set(null);
+    this._user.set(null);
   }
 
   decodeJWT(token: string) {

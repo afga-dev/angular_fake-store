@@ -18,8 +18,11 @@ export class SigninComponent {
   private activatedRoute = inject(ActivatedRoute);
   private userService = inject(UserService);
 
-  readonly error = signal<string | null>(null);
-  readonly isLoading = signal<boolean>(false);
+  private _error = signal<string | null>(null);
+  readonly error = this._error.asReadonly();
+
+  private _isLoading = signal<boolean>(false);
+  readonly isLoading = this._isLoading.asReadonly();
 
   showPassword = false;
 
@@ -28,18 +31,18 @@ export class SigninComponent {
     password: ['', [Validators.required, Validators.maxLength(128)]],
   });
 
-  async submitSignInForm() {
+  async onSubmit() {
     try {
       const signin = this.signInForm.getRawValue();
       signin.username = signin.username.trim();
       signin.password = signin.password.trim();
 
-      if (this.signInForm.invalid || this.isLoading() || !signin) return;
+      if (this.signInForm.invalid || this._isLoading() || !signin) return;
 
-      const response = await firstValueFrom(this.userService.signin(signin));
+      const response = await firstValueFrom(this.userService.signIn(signin));
       const decodedPayload = this.userService.decodeJWT(response.token);
       const user = await firstValueFrom(
-        this.userService.getUser(decodedPayload.sub)
+        this.userService.fetchUser(decodedPayload.sub)
       );
       this.userService.setUser(user);
       this.signInForm.reset();
@@ -48,10 +51,10 @@ export class SigninComponent {
         this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
       this.router.navigate([returnUrl]);
     } catch (err) {
-      this.error.set('Incorrect email or password.');
+      this._error.set('Incorrect email or password.');
       //console.log(err);
     } finally {
-      this.isLoading.set(false);
+      this._isLoading.set(false);
     }
   }
 

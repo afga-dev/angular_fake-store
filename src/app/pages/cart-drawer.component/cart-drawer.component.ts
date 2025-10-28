@@ -20,27 +20,29 @@ import { CartService } from '../../services/cart.service';
 export class CartDrawerComponent implements OnInit {
   private cartService = inject(CartService);
 
-  private hasPurchased = signal<boolean>(false);
+  private _hasPurchased = signal<boolean>(false);
+  readonly hasPurchased = this._hasPurchased.asReadonly();
 
-  readonly isCartOpen = this.cartService.getIsOpen;
-  readonly hasPurchasedSignal = this.hasPurchased.asReadonly();
-
-  closeCart = output<void>();
+  onCloseCart = output<void>();
 
   readonly resetPurchaseOnOpen = effect(() => {
-    if (this.cartService.getIsOpen()) this.hasPurchased.set(false);
+    if (this.cartService.isOpen()) this._hasPurchased.set(false);
   });
 
   ngOnInit(): void {
-    this.cartService.getCart();
+    this.cartService.loadCart();
   }
 
   getCart(): Cart[] {
-    return this.cartService.getCartSignal();
+    return this.cartService.cart();
+  }
+
+  isCartOpen(): boolean {
+    return this.cartService.isOpen();
   }
 
   getTotal(): number {
-    return this.cartService.totalCart();
+    return this.cartService.getTotal();
   }
 
   decreaseQuantity(id: number): void {
@@ -56,8 +58,8 @@ export class CartDrawerComponent implements OnInit {
   }
 
   onCheckout(): void {
-    this.cartService.onCheckout();
-    this.hasPurchased.set(true);
+    this.cartService.checkout();
+    this._hasPurchased.set(true);
   }
 
   onGeneratePDF(): void {

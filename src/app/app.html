@@ -3,19 +3,23 @@
   <!-- Narvbar -->
   <app-navbar
     [isSearchOpen]="showSearch"
-    (searchToggled)="searchToggled()"
+    (onSearchToggled)="searchToggled()"
     [isCartOpen]="showCart"
-    (cartToggled)="cartToggled()"
+    (onCartToggled)="cartToggled()"
+    (onClick)="closeChildren()"
   />
-  <app-cart-drawer (closeCart)="closeCart()" />
+  <app-cart-drawer (onCloseCart)="closeCart()" />
   <!-- Search -->
   <main class="flex-grow-1 bg-light">
     <app-search
       [isSearchOpen]="showSearch"
-      (closeSearch)="closeSearch()"
-      (search)="handleSearch($event)"
+      (onCloseSearch)="closeSearch()"
+      (onSearchQuery)="handleSearch($event)"
     />
     <router-outlet (activate)="closeChildren()" />
   </main>
+  @if(getpageLoaded()) {
+  <app-footer />
+  }
 </div>
 }
