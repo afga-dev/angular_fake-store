@@ -1,8 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Cart } from '../models/cart.interface';
 import { UserService } from './user.service';
-import jsPDF from 'jspdf';
-import autoTable, { RowInput } from 'jspdf-autotable';
 import { Product } from '../models/product.interface';
 
 @Injectable({
@@ -17,11 +15,12 @@ export class CartService {
   private _isOpen = signal<boolean>(false);
   readonly isOpen = this._isOpen.asReadonly();
 
+  // Load cart from localStorage and normalize items
   loadCart(): void {
     const cart = localStorage.getItem('cart');
     const parsedCart = cart ? JSON.parse(cart) : [];
     if (cart) {
-      const cartItems: Cart[] = (parsedCart || []).map((item: any) => ({
+      const cartItems: Cart[] = parsedCart.map((item: any) => ({
         id: Number(item.id),
         title: String(item.title),
         price: Number(item.price),
@@ -36,6 +35,7 @@ export class CartService {
     this._isOpen.set(state);
   }
 
+  // Create a new cart item from a product in the shop
   createCart(product: Product): Cart {
     return {
       id: product.id,
@@ -50,6 +50,7 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(this.cart()));
   }
 
+  // Calculate total price, with discount for authenticated users
   getTotal(): number {
     const total = this.cart().reduce(
       (sum, product) => sum + product.price * product.quantity,
@@ -63,12 +64,12 @@ export class CartService {
     }
   }
 
-  decreaseQuantity(id: number): void {
+  private updateQuantity(id: number, delta: number): void {
     const cart = [...this.cart()];
     const product = cart.find((p) => p.id === id);
     if (!product) return;
 
-    product.quantity--;
+    product.quantity += delta;
 
     if (product.quantity < 1) {
       this.removeProduct(id);
@@ -78,17 +79,15 @@ export class CartService {
     }
   }
 
-  incrementQuantity(id: number): void {
-    const cart = [...this.cart()];
-    const product = cart.find((p) => p.id === id);
-    if (!product) return;
-
-    product.quantity++;
-
-    this._cart.set(cart);
-    this.saveCart();
+  decreaseQuantity(id: number): void {
+    this.updateQuantity(id, -1);
   }
 
+  incrementQuantity(id: number): void {
+    this.updateQuantity(id, 1);
+  }
+
+  // Add product to cart or increment if already exists
   addProduct(product: Cart) {
     const cart = [...this.cart()];
     const getProduct = cart.find((p) => p.id === product.id);
@@ -108,120 +107,12 @@ export class CartService {
     this.saveCart();
   }
 
+  // Save current cart to sessionStorage for invoice and clear cart
   checkout(): void {
     const tempCart = this.cart();
 
     sessionStorage.setItem('tempCart', JSON.stringify(tempCart));
     this._cart.set([]);
-    localStorage.clear();
-  }
-
-  generatePDF(): void {
-    const temp = sessionStorage.getItem('tempCart');
-    if (!temp) return;
-
-    const cart: Cart[] = JSON.parse(temp);
-    if (cart.length < 1) return;
-
-    const doc = new jsPDF('portrait', 'mm', 'a4');
-
-    const date = new Date();
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
-
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(50);
-    doc.text('INVOICE', 14, 25);
-
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Date:', 14, 37);
-    doc.setFont('helvetica', 'normal');
-    doc.text(formattedDate, 25, 37);
-
-    const startY = 45;
-
-    const tableData: RowInput[] = cart.map((item) => [
-      item.title,
-      item.quantity.toString(),
-      `$${item.price.toFixed(2)}`,
-      `$${(item.price * item.quantity).toFixed(2)}`,
-    ]);
-
-    const total = cart.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-
-    tableData.push([
-      {
-        content: 'Total',
-        colSpan: 3,
-        styles: {
-          halign: 'right',
-          fontStyle: 'bold',
-          textColor: [255, 255, 255],
-          fillColor: [52, 58, 64],
-          fontSize: 12,
-          minCellHeight: 10,
-        },
-      },
-      {
-        content: `$${total.toFixed(2)}`,
-        styles: {
-          halign: 'right',
-          fontStyle: 'bold',
-          textColor: [255, 255, 255],
-          fillColor: [52, 58, 64],
-          fontSize: 12,
-          minCellHeight: 10,
-        },
-      },
-    ]);
-
-    autoTable(doc, {
-      startY,
-      head: [['Title', 'Quantity', 'Price', 'Total']],
-      body: tableData,
-      theme: 'plain',
-      styles: {
-        font: 'helvetica',
-        fontSize: 10,
-        cellPadding: 3,
-        valign: 'middle',
-        textColor: [0, 0, 0],
-      },
-      headStyles: {
-        fillColor: [52, 58, 64],
-        textColor: [255, 255, 255],
-        fontStyle: 'bold',
-      },
-      columnStyles: {
-        1: { halign: 'right', cellWidth: 20 },
-        2: { halign: 'right', cellWidth: 25 },
-        3: { halign: 'right', cellWidth: 25 },
-      },
-      alternateRowStyles: { fillColor: [255, 255, 255] },
-      didParseCell: (data) => {
-        const rowIndex = data.row.index;
-        if (rowIndex !== tableData.length - 1 && data.section === 'body') {
-          data.cell.styles.lineWidth = 0;
-        }
-      },
-      didDrawPage: (data) => {
-        const pages = doc.getNumberOfPages();
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'italic');
-        doc.text(
-          `Page ${data.pageNumber} of ${pages}`,
-          doc.internal.pageSize.getWidth() - 40,
-          doc.internal.pageSize.getHeight() - 10
-        );
-      },
-    });
-
-    doc.save(`Invoice_${formattedDate}.pdf`);
+    localStorage.removeItem('cart');
   }
 }

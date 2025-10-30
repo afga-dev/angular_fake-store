@@ -1,8 +1,4 @@
-<div
-  class="search-overlay"
-  [class.active]="isSearchOpen()"
-  (click)="onCloseSearch.emit()"
->
+<div class="search-overlay" [class.active]="isSearchOpen()" (click)="onClose()">
   <div class="search-panel" (click)="$event.stopPropagation()">
     <div class="container-fluid d-flex align-items-center">
       <i class="bi bi-search search-icon"></i>
@@ -10,7 +6,7 @@
         #searchInput
         type="text"
         class="search-input"
-        placeholder="SEARCH FOR..."
+        placeholder="Search for..."
         [(ngModel)]="searchTerm"
         maxlength="100"
         name="search"

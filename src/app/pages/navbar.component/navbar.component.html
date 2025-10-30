@@ -2,7 +2,7 @@
   <div
     class="container-fluid d-flex justify-content-between align-items-center"
   >
-    <!-- Left menu -->
+    <!-- Left -->
     <ul class="navbar-nav d-flex flex-row align-items-center mb-0">
       <li class="nav-item me-3">
         <a class="nav-link" (click)="scrollToHome()" title="Home">
@@ -15,28 +15,22 @@
         </a>
       </li>
     </ul>
-    <!-- Brand in center -->
-    <a class="navbar-brand mx-auto" routerLink="/">FAKE STORE</a>
-    <!-- Right icons -->
+    <!-- Center -->
+    <a class="navbar-brand mx-auto" routerLink="/">Fake store</a>
+    <!-- Right -->
     <ul class="navbar-nav d-flex flex-row align-items-center mb-0">
-      <!-- Search -->
       <li class="nav-item me-3">
-        <a class="nav-link" (click)="onSearchToggled.emit()" title="Search">
-          <i
-            class="bi"
-            [ngClass]="isSearchOpen() ? 'bi-x-lg' : 'bi-search'"
-          ></i>
+        <a class="nav-link" (click)="toggleSearch()" title="Search">
+          <i class="bi" [ngClass]="getSearchIconClass()"></i>
         </a>
       </li>
-      <!-- Cart -->
       <li class="nav-item me-3">
-        <a class="nav-link" (click)="onCartToggled.emit()" title="Cart">
-          <i class="bi" [ngClass]="isCartOpen() ? 'bi-x-lg' : 'bi-cart'"></i>
+        <a class="nav-link" (click)="toggleCart()" title="Cart">
+          <i class="bi" [ngClass]="getCartIconClass()"></i>
         </a>
       </li>
-      <!-- Sign in and out -->
       <li class="nav-item">
-        @if(!isAuthenticated()) {
+        @if (!isAuthenticated()) {
         <a
           class="nav-link"
           routerLink="/signin"

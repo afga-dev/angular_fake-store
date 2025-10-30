@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -16,6 +17,8 @@ export class SigninComponent {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+
+  private authService = inject(AuthService);
   private userService = inject(UserService);
 
   private _error = signal<string | null>(null);
@@ -39,8 +42,10 @@ export class SigninComponent {
 
       if (this.signInForm.invalid || this._isLoading() || !signin) return;
 
-      const response = await firstValueFrom(this.userService.signIn(signin));
-      const decodedPayload = this.userService.decodeJWT(response.token);
+      this._isLoading.set(true);
+
+      const response = await firstValueFrom(this.authService.signIn(signin));
+      const decodedPayload = this.authService.decodeJWT(response.token);
       const user = await firstValueFrom(
         this.userService.fetchUser(decodedPayload.sub)
       );
@@ -52,12 +57,13 @@ export class SigninComponent {
       this.router.navigate([returnUrl]);
     } catch (err) {
       this._error.set('Incorrect email or password.');
-      //console.log(err);
+      // console.error(err);
     } finally {
       this._isLoading.set(false);
     }
   }
 
+  // Helper for form validation state
   hasError(controlName: string, error: string): boolean {
     const control = this.signInForm.get(controlName);
     return !!(control?.touched && control?.hasError(error));

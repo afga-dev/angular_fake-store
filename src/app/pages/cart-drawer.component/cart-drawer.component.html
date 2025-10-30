@@ -1,19 +1,20 @@
-<div
-  class="cart-overlay"
-  [class.active]="isCartOpen()"
-  (click)="onCloseCart.emit()"
->
-  <div class="cart-drawer" (click)="$event.stopPropagation()">
-    @if(getCart().length < 1 && !hasPurchased()){
+<div class="cart-overlay" [class.active]="isOpen()" (click)="onClose()">
+  <div
+    class="cart-drawer"
+    [class.active]="isOpen()"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Empty or thank you states -->
+    @let products = cart(); @if(products.length < 1 && !hasPurchased()) {
     <div class="empty-cart">Your cart is empty</div>
-    }@else if(getCart().length < 1 && hasPurchased()) {
+    } @else if(products.length < 1 && hasPurchased()) {
     <div class="empty-cart thank-you">
       <h2>Thank you for your purchase!</h2>
       <p>
         You can download your invoice
         <button type="button" class="btn-remove" (click)="onGeneratePDF()">
-          here</button
-        >
+          here
+        </button>
       </p>
     </div>
     } @else {
@@ -22,10 +23,10 @@
       <h4 class="cart-title">CART</h4>
       <div class="divider"></div>
     </div>
-    <!-- Cart -->
+    <!-- Products -->
     <div class="cart-items flex-grow-1 overflow-auto my-3">
       <ul class="list-unstyled m-0">
-        @for (product of getCart(); track product.id) {
+        @for (product of products; track product.id) {
         <li class="cart-item d-flex align-items-center mb-3">
           <img
             [src]="product.image"
@@ -35,10 +36,10 @@
           <div class="flex-grow-1">
             <h6 class="mb-1 cart-title">{{ product.title | uppercase }}</h6>
             <p class="mb-2 small cart-price">{{ product.price | currency }}</p>
-
             <div class="d-flex align-items-center">
               <div class="quantity-group d-flex align-items-center me-3">
                 <button
+                  type="button"
                   class="btn-quantity"
                   (click)="decreaseQuantity(product.id)"
                 >
@@ -46,13 +47,18 @@
                 </button>
                 <span class="quantity-value">{{ product.quantity }}</span>
                 <button
+                  type="button"
                   class="btn-quantity"
                   (click)="increaseQuantity(product.id)"
                 >
                   +
                 </button>
               </div>
-              <button class="btn-remove" (click)="removeProduct(product.id)">
+              <button
+                type="button"
+                class="btn-remove"
+                (click)="removeProduct(product.id)"
+              >
                 Remove
               </button>
             </div>
@@ -64,7 +70,11 @@
     <!-- Footer -->
     <div class="cart-footer text-center mt-auto">
       <div class="divider"></div>
-      <button class="btn btn-dark w-100 py-2 mt-3" (click)="onCheckout()">
+      <button
+        type="button"
+        class="btn btn-dark w-100 py-2 mt-3"
+        (click)="onCheckout()"
+      >
         Checkout - {{ getTotal() | currency }}
       </button>
     </div>

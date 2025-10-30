@@ -1,4 +1,4 @@
-/* Overlay background */
+/* Overlay */
 .cart-overlay {
   position: fixed;
   top: 56px;
@@ -19,6 +19,7 @@
 .cart-overlay.active .cart-drawer {
   right: 0;
 }
+
 /* Cart drawer */
 .cart-drawer {
   position: fixed;
@@ -42,14 +43,15 @@
 .cart-price {
   color: #606060;
 }
+
 /* Divider */
 .divider {
   width: 100%;
   height: 1px;
   background-color: rgba(0, 0, 0, 0.15);
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+  margin: 0.25rem 0;
 }
+
 /* Products */
 .cart-items {
   max-height: calc(100vh - 250px);
@@ -62,7 +64,8 @@
   background: #ccc;
   border-radius: 3px;
 }
-/* Product imagen */
+
+/* Product image */
 .cart-item-img {
   width: 80px;
   height: 110px;
@@ -71,14 +74,15 @@
   border: 1px solid #eee;
   padding-right: 10px;
 }
+
 /* Quantity buttons */
 .quantity-group {
-  border: 1px solid #ccc;
   display: flex;
+  border: 1px solid #ccc;
   overflow: hidden;
 }
 .btn-quantity {
-  background-color: #f8f9fa;
+  background: #f8f9fa;
   border: none;
   padding: 0.25rem 0.75rem;
   font-size: 1rem;
@@ -95,6 +99,7 @@
   text-align: center;
   border: none;
 }
+
 /* Remove button */
 .btn-remove {
   background: none;
@@ -107,7 +112,6 @@
   text-transform: uppercase;
   color: #880808;
 }
-/* Animated line under text */
 .btn-remove::after {
   content: "";
   position: absolute;
@@ -121,6 +125,7 @@
 .btn-remove:hover::after {
   width: 100%;
 }
+
 /* Footer */
 .cart-footer {
   padding-top: 1rem;
@@ -128,11 +133,12 @@
   position: sticky;
   bottom: 0;
 }
-.btn-dark {
+.cart-footer .btn-dark {
   border-radius: 0;
   font-weight: 400;
 }
-/* Cart empty */
+
+/* Empty cart and thank you */
 .empty-cart {
   display: flex;
   flex-direction: column;
@@ -155,6 +161,7 @@
 .empty-cart a {
   text-decoration: underline;
 }
+
 /* Responsive */
 @media (max-width: 576px) {
   .cart-drawer {

@@ -1,28 +1,24 @@
+/* Host */
 :host {
   background: transparent;
-  margin: 0;
 }
-/* Product card layout */
+
+/* Product cart layout */
 .product-card {
   overflow: hidden;
   border: 0;
   background: transparent;
   display: flex;
   flex-direction: column;
-  text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 0.25rem;
 }
-/* Zoom and full color */
-.product-card:hover .product-img.loaded {
-  transform: scale(1.04);
-  filter: grayscale(0%);
+
+/* Product image and wrapper */
+.product-img-wrapper {
+  position: relative;
+  width: 100%;
 }
-.product-card:hover .fab-button {
-  opacity: 1;
-  pointer-events: auto;
-}
-/* Product image */
 .product-img {
   width: 100%;
   aspect-ratio: 1/1;
@@ -33,7 +29,8 @@
   position: relative;
   display: block;
 }
-/* Image states for lazy loading */
+
+/* Lazy loading image states */
 .product-img.loading {
   opacity: 0.6;
   transform: scale(1.02);
@@ -43,22 +40,30 @@
   filter: grayscale(30%);
   transform: scale(1);
 }
-/* Image wrapper */
-.product-img-wrapper {
-  position: relative;
-  width: 100%;
+
+/* Hover */
+.product-card:hover .product-img.loaded {
+  transform: scale(1.04);
+  filter: grayscale(0%);
 }
+.product-card:hover .fab-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+.fab-icon:hover {
+  transform: rotate(180deg);
+}
+
 /* Floating add-to-cart button */
 .fab-button {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   right: 10px;
-  width: 46px;
-  height: 46px;
+  width: 36px;
+  height: 36px;
   font-size: 1.1rem;
   background: #f8f9fb;
   border: none;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,9 +73,17 @@
   z-index: 2;
   cursor: pointer;
 }
-/* Product information */
+.fab-icon {
+  transition: transform 0.4s ease;
+}
+
+/* Card body and product information */
 .card-body {
   padding: 12px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .product-title {
   font-size: 0.95rem;
@@ -80,24 +93,12 @@
 .product-price {
   font-size: 0.85rem;
   padding: 3px 8px;
-  border-radius: 0;
   display: inline-block;
   color: #606060;
 }
-/* Responsive columns */
-.col-6 {
-  flex: 0 0 50%;
-  max-width: 50%;
-}
-@media (min-width: 768px) {
-  .col-md-4 {
-    flex: 0 0 33.3333%;
-    max-width: 33.3333%;
-  }
-}
-@media (min-width: 992px) {
-  .col-lg-3 {
-    flex: 0 0 25%;
-    max-width: 25%;
-  }
+
+/* Error */
+.shop-error {
+  text-align: center;
+  text-transform: uppercase;
 }
