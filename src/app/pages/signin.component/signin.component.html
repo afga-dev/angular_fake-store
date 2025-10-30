@@ -5,8 +5,8 @@
     <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
       <!-- Header -->
       <div class="text-center mb-4">
-        <h3 id="signup-heading">WELCOME BACK</h3>
-        <p class="small">SIGN IN TO START SHOPPING</p>
+        <h3 class="signup-heading">Welcome back</h3>
+        <p class="small">Sign in to get discounts!</p>
       </div>
       <!-- Alerts -->
       @if(error()) {
@@ -29,6 +29,10 @@
         <div class="input-error-bubble" aria-live="polite">
           Please fill out this field.
         </div>
+        } @if(hasError('username', 'maxlength')) {
+        <div class="input-error-bubble" aria-live="polite">
+          This fill can't be more than 50 characters.
+        </div>
         }
       </div>
       <!-- Password -->
@@ -46,6 +50,10 @@
         <div class="input-error-bubble" aria-live="polite">
           Please fill out this field.
         </div>
+        } @if(hasError('password', 'maxlength')) {
+        <div class="input-error-bubble" aria-live="polite">
+          This fill can't be more than 128 characters.
+        </div>
         }
       </div>
       <!-- Footer -->
@@ -53,9 +61,9 @@
         <button
           type="submit"
           class="btn btn-dark"
-          [disabled]="signInForm.invalid"
+          [disabled]="signInForm.invalid || isLoading()"
         >
-          SIGN IN
+          Sign in
         </button>
       </div>
     </form>

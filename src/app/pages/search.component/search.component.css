@@ -16,6 +16,7 @@
   pointer-events: auto;
   background-color: rgba(0, 0, 0, 0.4);
 }
+
 /* Search panel */
 .search-panel {
   background-color: #212529;
@@ -28,6 +29,7 @@
 .search-overlay.active .search-panel {
   transform: translateY(0);
 }
+
 /* Search input and icon */
 .search-icon {
   color: #fff;

@@ -17,11 +17,11 @@ export class ProductService {
   private _products = signal<Product[]>([]);
 
   private _queryParamMap = toSignal(this.activatedRoute.queryParamMap);
-  readonly queryParamMap = this._queryParamMap;
   private queryParamSearch = computed(
     () => this._queryParamMap()?.get('q') ?? ''
   );
 
+  // Filter products based on the search query
   readonly filteredProducts = computed(() => {
     const query = this.queryParamSearch();
     return query
@@ -29,6 +29,7 @@ export class ProductService {
       : this._products();
   });
 
+  // Fetch products from API
   fetchProducts(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(`${this.baseUrl}/products`);
   }

@@ -1,13 +1,20 @@
-import { Directive, ElementRef, input, OnInit, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 
 @Directive({
   selector: '[appLazyLoading]',
   standalone: true,
 })
-export class LazyLoadingDirective implements OnInit {
-  appLazyLoading = input<string>('src');
+export class LazyLoadingDirective implements OnInit, OnDestroy {
+  appLazyLoading = input.required<string>();
 
-  private intersectionObserver?: IntersectionObserver;
+  private _intersectionObserver?: IntersectionObserver;
 
   constructor(
     private element: ElementRef<HTMLImageElement>,
@@ -20,15 +27,15 @@ export class LazyLoadingDirective implements OnInit {
     this.renderer.addClass(image, 'loading');
 
     if ('IntersectionObserver' in window) {
-      this.intersectionObserver = new IntersectionObserver((entries) => {
+      this._intersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             this.loadImage(image);
-            this.intersectionObserver?.unobserve(image);
+            this._intersectionObserver?.unobserve(image);
           }
         });
       });
-      this.intersectionObserver.observe(image);
+      this._intersectionObserver.observe(image);
     } else {
       this.loadImage(image);
     }
@@ -42,5 +49,9 @@ export class LazyLoadingDirective implements OnInit {
       this.renderer.removeClass(image, 'loading');
       this.renderer.addClass(image, 'loaded');
     };
+  }
+
+  ngOnDestroy(): void {
+    this._intersectionObserver?.disconnect();
   }
 }

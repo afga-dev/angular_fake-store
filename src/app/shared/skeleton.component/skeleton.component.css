@@ -1,3 +1,4 @@
+/* Skeleton */
 .skeleton-container {
   opacity: 1;
 }
@@ -29,6 +30,8 @@
 .skeleton-text.long {
   width: 100%;
 }
+
+/* Animation */
 @keyframes shimmer-horizontal {
   0% {
     background-position: -400px 0;

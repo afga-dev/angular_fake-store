@@ -1,3 +1,4 @@
+/* Host */
 :host {
   display: flex;
   justify-content: center;
@@ -5,7 +6,8 @@
   min-height: calc(100vh - 56px);
   padding: 1rem;
 }
-/* Card */
+
+/* Sign in card layout */
 .card {
   background: transparent;
   border: none;
@@ -14,22 +16,21 @@
   max-width: 420px;
   padding: 2rem 1.5rem;
   text-align: center;
+  text-transform: uppercase;
 }
-#signup-heading {
-  margin-top: 0.5rem;
-  margin-bottom: 0.2rem;
+.signup-heading {
+  margin: 0.5rem 0 0.2rem;
   font-weight: 400;
 }
-/* Inputs */
+
+/* Form */
 .form-control {
   border: 1px solid #ccc;
   border-radius: 0;
   box-shadow: none;
 }
-.btn-outline-secondary {
-  border: 1px solid;
-}
-/* Submit button */
+
+/* Sign in button */
 .btn-dark {
   border: none;
   border-radius: 0;
@@ -39,18 +40,12 @@
 .btn-dark:hover {
   background-color: #333;
 }
-/* Alerts */
+
+/* Alert */
 .alert {
   border-radius: 0;
   border: none;
 }
-/* Responsive */
-@media (max-width: 576px) {
-  .card {
-    padding: 1.5rem 1rem;
-  }
-}
-/* Error bubble */
 .position-relative {
   position: relative;
 }
@@ -70,9 +65,18 @@
   opacity: 0;
   animation: slideIn 0.2s forwards;
 }
+
+/* Animation */
 @keyframes slideIn {
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Reponsive */
+@media (max-width: 576px) {
+  .card {
+    padding: 1.5rem 1rem;
   }
 }

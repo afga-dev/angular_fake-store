@@ -1,12 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Product } from '../../models/product.interface';
 import { ProductService } from '../../services/product.service';
-import { firstValueFrom } from 'rxjs';
+import { catchError, delay, firstValueFrom, of, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
 import { CartService } from '../../services/cart.service';
 import { SkeletonComponent } from '../../shared/skeleton.component/skeleton.component';
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-shop',
@@ -16,24 +16,33 @@ import { UserService } from '../../services/user.service';
   styleUrl: './shop.component.css',
 })
 export class ShopComponent implements OnInit {
-  private userService = inject(UserService);
+  private authService = inject(AuthService);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
 
-  private _loading = signal(true);
+  private _error = signal<string | null>(null);
+  readonly error = this._error.asReadonly();
+
+  private _loading = signal<boolean>(true);
   readonly loading = this._loading.asReadonly();
+
+  filteredProducts = computed(() => this.productService.filteredProducts());
 
   async ngOnInit() {
     try {
-      const products = await firstValueFrom(
-        this.productService.fetchProducts()
+      await firstValueFrom(
+        this.productService.fetchProducts().pipe(
+          tap((p) => this.productService.setProducts(p)),
+          delay(200),
+          catchError(() => {
+            this._error.set('Failed to load products');
+            return of([]);
+          })
+        )
       );
-      this.productService.setProducts(products);
-    } catch (err) {
-      // console.log(err);
     } finally {
-      setTimeout(() => this._loading.set(false), 200);
-      this.userService.setPageLoaded(true);
+      this._loading.set(false);
+      this.authService.setPageLoaded(true);
     }
   }
 
@@ -41,9 +50,5 @@ export class ShopComponent implements OnInit {
     const newProduct = this.cartService.createCart(product);
     this.cartService.addProduct(newProduct);
     this.cartService.setIsOpen(true);
-  }
-
-  getFilteredProducts(): Product[] {
-    return this.productService.filteredProducts();
   }
 }

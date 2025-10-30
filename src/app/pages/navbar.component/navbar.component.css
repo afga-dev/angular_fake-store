@@ -1,13 +1,18 @@
-/* Navbar links */
+/* Navbar link tweaks */
 .nav-link {
-  margin-right: 0.5rem;
   cursor: pointer;
+  transition: color 0.2s ease-in-out;
 }
-/* Navbar when collapsed */
+.nav-link:hover {
+  color: #fff;
+}
+
+/* Brand */
+.navbar-brand {
+  text-transform: uppercase;
+}
+
+/* Slightly wider padding for the navbar container */
 .navbar .container-fluid {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-.navbar-nav .nav-item {
-  margin-bottom: 0;
+  padding-inline: 1rem;
 }

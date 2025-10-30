@@ -1,11 +1,12 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
 import { SearchComponent } from './pages/search.component/search.component';
 import { NavbarComponent } from './pages/navbar.component/navbar.component';
 import { CartDrawerComponent } from './pages/cart-drawer.component/cart-drawer.component';
-import { CartService } from './services/cart.service';
 import { FooterComponent } from './pages/footer.component/footer.component';
+import { CartService } from './services/cart.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -18,30 +19,26 @@ import { FooterComponent } from './pages/footer.component/footer.component';
     FooterComponent,
   ],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrls: ['./app.css'],
 })
 export class App implements OnInit {
   private router = inject(Router);
+
+  private authService = inject(AuthService);
   private userService = inject(UserService);
   private cartService = inject(CartService);
 
-  showSearch = false;
-  showCart = false;
+  private _showSearch = signal(false);
+  readonly showSearch = this._showSearch.asReadonly();
+
+  showCart = this.cartService.isOpen;
+
+  loaded = computed(() => this.userService.isLoaded());
+  pageLoaded = computed(() => this.authService.isPageLoaded());
 
   ngOnInit(): void {
+    // Load user id from localStorage on app initialization
     this.userService.loadUserFromLocalStorage();
-  }
-
-  readonly isOpen = effect(() => {
-    this.showCart = this.cartService.isOpen();
-  });
-
-  getLoaded(): boolean {
-    return this.userService.isLoaded();
-  }
-
-  getpageLoaded(): boolean {
-    return this.userService.isPageLoaded();
   }
 
   handleSearch(query: string): void {
@@ -49,28 +46,25 @@ export class App implements OnInit {
   }
 
   searchToggled(): void {
-    this.showSearch = !this.showSearch;
+    this._showSearch.update((v) => !v);
     this.closeCart();
   }
 
   closeSearch(): void {
-    this.showSearch = false;
+    this._showSearch.set(false);
   }
 
   cartToggled(): void {
-    this.showCart = !this.showCart;
-    this.cartService.setIsOpen(this.showCart);
-    this.closeSearch();
+    this.cartService.setIsOpen(!this.showCart());
+    this._showSearch.set(false);
   }
 
   closeCart(): void {
-    this.showCart = false;
     this.cartService.setIsOpen(false);
   }
 
   closeChildren(): void {
-    this.showSearch = false;
-    this.showCart = false;
-    this.cartService.setIsOpen(false);
+    this.closeSearch();
+    this.closeCart();
   }
 }

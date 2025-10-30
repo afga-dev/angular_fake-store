@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  computed,
   effect,
   inject,
   OnInit,
   output,
   signal,
 } from '@angular/core';
-import { Cart } from '../../models/cart.interface';
 import { CartService } from '../../services/cart.service';
+import { InvoiceService } from '../../services/invoice.service';
 
 @Component({
   selector: 'app-cart-drawer',
@@ -19,26 +20,28 @@ import { CartService } from '../../services/cart.service';
 })
 export class CartDrawerComponent implements OnInit {
   private cartService = inject(CartService);
+  private invoiceService = inject(InvoiceService);
 
+  // Tracks if a purchase has been completed, used to show the thank you message
   private _hasPurchased = signal<boolean>(false);
   readonly hasPurchased = this._hasPurchased.asReadonly();
 
   onCloseCart = output<void>();
 
+  cart = computed(() => this.cartService.cart());
+  isOpen = computed(() => this.cartService.isOpen());
+
+  // Resets purchase state when cart drawer is opened
   readonly resetPurchaseOnOpen = effect(() => {
-    if (this.cartService.isOpen()) this._hasPurchased.set(false);
+    if (this.isOpen()) this._hasPurchased.set(false);
   });
 
   ngOnInit(): void {
     this.cartService.loadCart();
   }
 
-  getCart(): Cart[] {
-    return this.cartService.cart();
-  }
-
-  isCartOpen(): boolean {
-    return this.cartService.isOpen();
+  onClose(): void {
+    this.onCloseCart.emit();
   }
 
   getTotal(): number {
@@ -63,6 +66,6 @@ export class CartDrawerComponent implements OnInit {
   }
 
   onGeneratePDF(): void {
-    this.cartService.generatePDF();
+    this.invoiceService.generatePDF();
   }
 }
