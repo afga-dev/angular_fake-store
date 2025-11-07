@@ -3,9 +3,9 @@ import { Product } from '../../models/product.interface';
 import { ProductService } from '../../services/product.service';
 import { catchError, delay, firstValueFrom, of, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LazyLoadingDirective } from '../../directives/lazyLoading.directive';
+import { LazyLoadingDirective } from '../../directives/lazy-loading.directive';
 import { CartService } from '../../services/cart.service';
-import { SkeletonComponent } from '../../shared/skeleton.component/skeleton.component';
+import { SkeletonComponent } from '../../shared/shop-skeleton.component/shop-skeleton.component';
 import { AuthService } from '../../services/auth.service';
 
 @Component({

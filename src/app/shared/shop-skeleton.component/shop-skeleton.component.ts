@@ -5,8 +5,8 @@ import { Component, computed, input } from '@angular/core';
   selector: 'app-skeleton',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './skeleton.component.html',
-  styleUrl: './skeleton.component.css',
+  templateUrl: './shop-skeleton.component.html',
+  styleUrl: './shop-skeleton.component.css',
 })
 export class SkeletonComponent {
   count = input(20);

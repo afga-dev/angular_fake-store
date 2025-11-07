@@ -28,7 +28,7 @@ export class App implements OnInit {
   private userService = inject(UserService);
   private cartService = inject(CartService);
 
-  private _showSearch = signal(false);
+  private _showSearch = signal<boolean>(false);
   readonly showSearch = this._showSearch.asReadonly();
 
   showCart = this.cartService.isOpen;

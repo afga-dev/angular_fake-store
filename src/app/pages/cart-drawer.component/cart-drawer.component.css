@@ -162,6 +162,11 @@
   text-decoration: underline;
 }
 
+/* Checkout button */
+.checkout-button {
+  text-transform: uppercase;
+}
+
 /* Responsive */
 @media (max-width: 576px) {
   .cart-drawer {

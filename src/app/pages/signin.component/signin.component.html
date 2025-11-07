@@ -6,7 +6,7 @@
       <!-- Header -->
       <div class="text-center mb-4">
         <h3 class="signup-heading">Welcome back</h3>
-        <p class="small">Sign in to get discounts!</p>
+        <p class="small">Sign in to get discounts</p>
       </div>
       <!-- Alerts -->
       @if(error()) {
@@ -60,7 +60,7 @@
       <div class="d-grid">
         <button
           type="submit"
-          class="btn btn-dark"
+          class="signin-button btn btn-dark"
           [disabled]="signInForm.invalid || isLoading()"
         >
           Sign in

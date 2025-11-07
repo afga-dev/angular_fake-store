@@ -66,6 +66,11 @@
   animation: slideIn 0.2s forwards;
 }
 
+/* Sign in button */
+.signin-button {
+  text-transform: uppercase;
+}
+
 /* Animation */
 @keyframes slideIn {
   to {

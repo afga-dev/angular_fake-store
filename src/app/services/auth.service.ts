@@ -11,9 +11,10 @@ import { UserService } from './user.service';
 export class AuthService {
   private baseUrl = inject(API_URL);
   private httpClient = inject(HttpClient);
+
   private userService = inject(UserService);
 
-  private _isPageLoaded = signal(false);
+  private _isPageLoaded = signal<boolean>(false);
   readonly isPageLoaded = this._isPageLoaded.asReadonly();
 
   // Sends sign in credentials to the API and returns the response

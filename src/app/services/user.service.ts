@@ -13,7 +13,7 @@ export class UserService {
 
   private _user = signal<User | null>(null);
 
-  private _isLoaded = signal(false);
+  private _isLoaded = signal<boolean>(false);
   readonly isLoaded = this._isLoaded.asReadonly();
 
   readonly isAuthenticated = computed(() => !!this._user());
