@@ -6,7 +6,7 @@ import {
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
-import { API_URL } from './services/api.tokens';
+import { API_URL } from './core/services/api.tokens';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {

@@ -1,12 +1,12 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { UserService } from './services/user.service';
+import { UserService } from './core/services/user.service';
 import { SearchComponent } from './pages/search.component/search.component';
 import { NavbarComponent } from './pages/navbar.component/navbar.component';
 import { CartDrawerComponent } from './pages/cart-drawer.component/cart-drawer.component';
 import { FooterComponent } from './pages/footer.component/footer.component';
-import { CartService } from './services/cart.service';
-import { AuthService } from './services/auth.service';
+import { CartService } from './core/services/cart.service';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',

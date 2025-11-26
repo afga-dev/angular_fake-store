@@ -1,12 +1,12 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { Product } from '../../models/product.interface';
-import { ProductService } from '../../services/product.service';
+import { Product } from '../../core/models/product.interface';
+import { ProductService } from '../../core/services/product.service';
 import { catchError, delay, firstValueFrom, of, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { LazyLoadingDirective } from '../../directives/lazy-loading.directive';
-import { CartService } from '../../services/cart.service';
-import { SkeletonComponent } from '../../shared/shop-skeleton.component/shop-skeleton.component';
-import { AuthService } from '../../services/auth.service';
+import { LazyLoadingDirective } from '../../shared/directives/lazy-loading.directive';
+import { CartService } from '../../core/services/cart.service';
+import { SkeletonComponent } from '../../shared/components/shop-skeleton.component/shop-skeleton.component';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-shop',

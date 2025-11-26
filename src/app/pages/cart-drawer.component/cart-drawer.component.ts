@@ -8,8 +8,8 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { CartService } from '../../services/cart.service';
-import { InvoiceService } from '../../services/invoice.service';
+import { CartService } from '../../core/services/cart.service';
+import { InvoiceService } from '../../core/services/invoice.service';
 
 @Component({
   selector: 'app-cart-drawer',

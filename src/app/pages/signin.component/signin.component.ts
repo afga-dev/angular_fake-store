@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../core/services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-signin',

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { UserService } from '../../services/user.service';
-import { scrollToElement, scrollToTop } from '../../utils/scroll-utils';
-import { CartService } from '../../services/cart.service';
-import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../core/services/user.service';
+import { scrollToElement, scrollToTop } from '../../shared/utils/scroll-utils';
+import { CartService } from '../../core/services/cart.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',

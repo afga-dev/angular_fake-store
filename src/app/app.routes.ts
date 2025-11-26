@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ShopComponent } from './pages/shop.component/shop.component';
-import { guestGuard } from './guards/guest-guard';
+import { guestGuard } from './core/guards/guest-guard';
 
 export const routes: Routes = [
   { path: '', component: ShopComponent },
